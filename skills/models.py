@@ -10,5 +10,5 @@ class Subject(BaseModel):
 
 class Link(BaseModel):
     address = models.URLField(null=True, blank=True)
-    subject_id = models.ForeignKey(Subject, related_name='subjects', on_delete=models.CASCADE)
+    subject_id = models.ForeignKey(Subject, related_name='links', on_delete=models.CASCADE)
 
