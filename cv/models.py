@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 from custom_lib.models import BaseModel
 
 
@@ -31,8 +31,8 @@ class CV(BaseModel):
     about_me = models.TextField()
     phone_number = models.BigIntegerField()
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    character = models.CharField(max_length=100, choices=CHARACTER_CHOICES,blank=True)
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE,related_name='cv')
+    character = models.CharField(max_length=100, choices=CHARACTER_CHOICES, blank=True)
+    user_id = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cv')
     duty_system = models.CharField(max_length=1, choices=DUTY_SYSTEM_CHOICES)
     martial_status = models.CharField(max_length=1, choices=MARTIAL_STATUS_CHOICES)
     data_of_birth = models.DateField()
