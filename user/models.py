@@ -1,5 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from django.db import models
+from cv.models import CV
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.validators import RegexValidator, EmailValidator
 from django.utils.translation import ugettext_lazy as _
@@ -54,4 +55,4 @@ class Profile(models.Model):
 
 class FavoriteCVs(models.Model):
     user_id = models.ManyToManyField('User', related_name='favorite_cv')
-    resume_id = models.ManyToManyField('CV', related_name='favorite_cv')  # import cv
+    cv_id = models.ManyToManyField(CV, related_name='favorite_cv')  # import cv
