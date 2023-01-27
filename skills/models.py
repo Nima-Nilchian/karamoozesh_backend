@@ -3,6 +3,7 @@ from custom_lib.models import BaseModel
 
 
 class Subject(BaseModel):
+    name = models.CharField(max_length=32)
     description = models.TextField(blank=True, null=True)
     statistics = models.TextField(blank=True, null=True)
     roadmap = models.ImageField(upload_to='image/skills/roadmaps', null=True, blank=True)
