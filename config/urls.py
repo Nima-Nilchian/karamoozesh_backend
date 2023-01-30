@@ -36,4 +36,7 @@ urlpatterns = [
     # user
     path('user/', include('user.urls')),
 
+    # cv
+    path('cv/', include('cv.urls')),
+
 ]
