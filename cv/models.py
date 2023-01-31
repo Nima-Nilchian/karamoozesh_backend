@@ -86,7 +86,7 @@ class Skill(BaseModel):
         ('4', '4'),
         ('5', '5'),
     )
-    skill = models.CharField(max_length=250)
+    title = models.CharField(max_length=250)
     level = models.CharField(max_length=1, blank=True, null=True, choices=LEVEL_CHOICES)
     cv_id = models.ForeignKey(CV, related_name='skills', blank=True, null=True, on_delete=models.CASCADE)
 
