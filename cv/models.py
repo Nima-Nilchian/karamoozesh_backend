@@ -59,7 +59,7 @@ class Language(BaseModel):
 class Work(BaseModel):
     title = models.CharField(max_length=250)
     company = models.CharField(max_length=250)
-    industry = models.CharField(max_length=250)
+    industry = models.CharField(max_length=250, blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     until_now = models.BooleanField(default=False)
@@ -74,6 +74,7 @@ class Education(BaseModel):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     until_now = models.BooleanField(default=False)
+    gpa = models.FloatField(blank=True, null=True)
     cv_id = models.ForeignKey(CV, related_name='educations', blank=True, null=True, on_delete=models.CASCADE)
 
 
