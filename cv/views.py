@@ -17,6 +17,9 @@ class CvList(generics.ListCreateAPIView):
         'gender', 'duty_system', 'martial_status',
         'character', 'is_active', 'city',
     )
+    search_fields = ('about_me', 'phone_number', 'address')
+    ordering_fields = ["created_time", "updated_time"]
+    ordering = ["-created_time"]
 
 
 class CvDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -29,6 +32,9 @@ class CvDetail(generics.RetrieveUpdateDestroyAPIView):
 class LinkListView(generics.ListCreateAPIView):
     queryset = Link.objects.all()
     serializer_class = LinkSerializers
+    search_fields = ('title',)
+    ordering_fields = ["created_time", "updated_time"]
+    ordering = ["-created_time"]
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -54,6 +60,9 @@ class LinkDetailView(generics.RetrieveUpdateDestroyAPIView):
 class ProjectListView(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializers
+    search_fields = ('title', 'description')
+    ordering_fields = ["created_time", "updated_time"]
+    ordering = ["-created_time"]
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -79,6 +88,9 @@ class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
 class CertificateListView(generics.ListCreateAPIView):
     queryset = Certificate.objects.all()
     serializer_class = CertificateSerializers
+    search_fields = ('title', 'institute', 'description')
+    ordering_fields = ["created_time", "updated_time"]
+    ordering = ["-created_time"]
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -105,6 +117,9 @@ class SkillListView(generics.ListCreateAPIView):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializers
     filterset_fields = ('level',)
+    search_fields = ('title',)
+    ordering_fields = ["level"]
+    ordering = ["-level"]
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -115,6 +130,10 @@ class SkillListView(generics.ListCreateAPIView):
 class SkillDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializers
+    filterset_fields = ('level',)
+    search_fields = ('title',)
+    ordering_fields = ["level"]
+    ordering = ["-level"]
 
     def get_object(self):
         if self.kwargs.get('cv_id'):
@@ -131,6 +150,9 @@ class EducationListView(generics.ListCreateAPIView):
     queryset = Education.objects.all()
     serializer_class = EducationSerializers
     filterset_fields = ('field_of_study', 'university')
+    search_fields = ('university', 'field_of_study', 'description')
+    ordering_fields = ["start_date"]
+    ordering = ["+start_date"]
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -141,6 +163,8 @@ class EducationListView(generics.ListCreateAPIView):
 class EducationDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Education.objects.all()
     serializer_class = EducationSerializers
+    ordering_fields = ["start_date"]
+    ordering = ["+start_date"]
 
     def get_object(self):
         if self.kwargs.get('cv_id'):
@@ -156,6 +180,9 @@ class EducationDetailView(generics.RetrieveUpdateDestroyAPIView):
 class WorkListView(generics.ListCreateAPIView):
     queryset = Work.objects.all()
     serializer_class = WorkSerializers
+    search_fields = ('title', 'company', 'description', 'industry')
+    ordering_fields = ["start_date"]
+    ordering = ["-start_date"]
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -166,6 +193,8 @@ class WorkListView(generics.ListCreateAPIView):
 class WorkDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Work.objects.all()
     serializer_class = WorkSerializers
+    ordering_fields = ["start_date"]
+    ordering = ["-start_date"]
 
     def get_object(self):
         if self.kwargs.get('cv_id'):
@@ -182,6 +211,9 @@ class LanguageListView(generics.ListCreateAPIView):
     queryset = Language.objects.all()
     serializer_class = LanguageSerializers
     filterset_fields = ('level',)
+    search_fields = ('title',)
+    ordering_fields = ["level"]
+    ordering = ["-level"]
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -192,6 +224,10 @@ class LanguageListView(generics.ListCreateAPIView):
 class LanguageDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Language.objects.all()
     serializer_class = LanguageSerializers
+    filterset_fields = ('level',)
+    search_fields = ('title',)
+    ordering_fields = ["level"]
+    ordering = ["-level"]
 
     def get_object(self):
         if self.kwargs.get('cv_id'):
