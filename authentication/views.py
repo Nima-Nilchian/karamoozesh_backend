@@ -1,9 +1,10 @@
 
 from django.shortcuts import render
+from django.template.loader import get_template
 from rest_framework import generics, status, views, permissions
 from rest_framework.decorators import api_view
 
-from .serializers import EmailVerificationSerializer, RegisterSerializer
+from .serializers import RegisterSerializer, ResetPasswordEmailRequestSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from user.models import User
@@ -28,27 +29,36 @@ def registration_views(request):
         dataa = {}
 
         if serializer.is_valid():
-            account = serializer.save()
-            user_data = serializer.data
-            user = User.objects.get(email=user_data['email'])
-            token, created = Token.objects.get_or_create(user=user)
+            user = serializer.save()
             current_site = get_current_site(request).domain
-            relativeLink = reverse('email-verify')
-            absurl = 'http://' + current_site + relativeLink + "?token=" + str(token.key)
-            email_body = 'Hi ' + user.username + \
-                         ' Use the link below to verify your email \n' + absurl
-            data = {'email_body': email_body, 'to_email': user.email,
-                    'email_subject': 'Verify your email'}
 
+            data = Util.email_body(user, current_site)
             Util.send_email(data)
+
             dataa['response'] = 'Registration Successfully'
-            dataa['username'] = account.username
-            dataa['email'] = account.email
+            dataa['username'] = user.username
+            dataa['email'] = user.email
 
         else:
             dataa = serializer.errors
 
         return Response(dataa, status=status.HTTP_201_CREATED)
 
-class VerifyEmail(views.APIView):
-    serializer_class = EmailVerificationSerializer
+
+
+@api_view(['get'])
+def verify_email_view(request):
+    if request.method == 'GET':
+        token = request.GET.get('token')
+        user = Token.objects.filter(key=token)
+        if user:
+            user = user.first()
+            if not user.is_verified:
+                user.is_verified = True
+                user.save()
+
+            return Response({"email": "Successfully Activated"}, status=status.HTTP_200_OK)
+
+        return Response({"error": "User not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+
