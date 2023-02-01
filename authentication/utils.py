@@ -22,7 +22,7 @@ class EmailThread(threading.Thread):
 
 class Util:
     @staticmethod
-    def email_body(user, current_site):
+    def email_verification_body(user, current_site):
         token, created = Token.objects.get_or_create(user=user)
 
         relative_link = reverse('email-verify')

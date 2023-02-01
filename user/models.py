@@ -1,16 +1,11 @@
 from django.contrib.auth.hashers import make_password
 from django.db import models
-from django.dispatch import receiver
-from django.urls import reverse
-
 from custom_lib.models import BaseModel
 from talent_survey.models import TalentSurvey
 from cv.models import CV
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.validators import RegexValidator, EmailValidator
 from django.utils.translation import ugettext_lazy as _
-from django_rest_passwordreset.signals import reset_password_token_created
-from django.core.mail import send_mail
 
 
 class UserManager(BaseUserManager):
@@ -69,30 +64,3 @@ class UserSurvey(BaseModel):
     user_id = models.ForeignKey('User', related_name='surveys', on_delete=models.CASCADE)
     survey_id = models.ForeignKey(TalentSurvey, related_name='users', on_delete=models.CASCADE)
     result = models.URLField()
-
-
-
-
-
-
-from django.dispatch import receiver
-from django.urls import reverse
-from django_rest_passwordreset.signals import reset_password_token_created
-from django.core.mail import send_mail
-
-
-@receiver(reset_password_token_created)
-def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
-
-    email_plaintext_message = "{}?token={}".format(reverse('password_reset:reset-password-request'), reset_password_token.key)
-
-    send_mail(
-        # title:
-        "Password Reset for {title}".format(title="Some website title"),
-        # message:
-        email_plaintext_message,
-        # from:
-        "amoozeshyar@local.ir",
-        # to:
-        [reset_password_token.user.email]
-    )

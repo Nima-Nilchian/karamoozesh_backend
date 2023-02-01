@@ -10,8 +10,7 @@ from rest_framework.authtoken.models import Token
 
 # Create your views here.
 
-
-@api_view(['POST',])
+@api_view(['POST', ])
 def registration_views(request):
     if request.method == 'POST':
         serializer = RegisterSerializer(data=request.data)
