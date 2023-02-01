@@ -35,7 +35,7 @@ urlpatterns = [
 
     # user
     path('user/', include('user.urls')),
-    path('api/user/', include('authentication.urls'))
+    path('api/user/', include('authentication.urls')),
     
     # cv
     path('cv/', include('cv.urls')),

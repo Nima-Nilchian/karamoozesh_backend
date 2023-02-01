@@ -46,6 +46,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = UserManager()
+    is_verified = models.BooleanField(default=False, null=True, blank=True)
 
 
 class Profile(BaseModel):

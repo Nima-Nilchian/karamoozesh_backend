@@ -95,6 +95,7 @@ class ResetPasswordSerializer(serializers.Serializer):
         return attrs
 
 
-
-
-
+class ChangePasswordSerializer(serializers.Serializer):
+    model = User
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
