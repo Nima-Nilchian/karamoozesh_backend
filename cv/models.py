@@ -27,19 +27,18 @@ class CV(BaseModel):
     )
     firstname = models.CharField(max_length=250)
     lastname = models.CharField(max_length=250)
-    avatar = models.ImageField(upload_to='image/cv/avatar', blank=True)
-    about_me = models.TextField()
-    phone_number = models.BigIntegerField()
+    avatar = models.ImageField(upload_to='image/cv/avatar', blank=True, null=True)
+    about_me = models.TextField(blank=True, null=True)
+    phone_number = models.BigIntegerField(blank=True, null=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    character = models.CharField(max_length=100, choices=CHARACTER_CHOICES, blank=True)
+    character = models.CharField(max_length=100, choices=CHARACTER_CHOICES, blank=True, null=True)
     user_id = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cv')
     duty_system = models.CharField(max_length=1, choices=DUTY_SYSTEM_CHOICES)
     martial_status = models.CharField(max_length=1, choices=MARTIAL_STATUS_CHOICES)
     data_of_birth = models.DateField()
     city = models.CharField(max_length=250)
-    address = models.TextField(blank=True)
-    suggested_salary = models.BigIntegerField(blank=True)
-    # talent_survey = models.ManyToManyField(Talent_survey,related_name='cv',blank=True),
+    address = models.TextField(blank=True, null=True)
+    suggested_salary = models.BigIntegerField(blank=True, null=True)
     file = models.FileField(upload_to='files/cv/%Y/%m/%d/', blank=True, null=True)
     is_active = models.BooleanField(default=False)
 
@@ -60,22 +59,23 @@ class Language(BaseModel):
 class Work(BaseModel):
     title = models.CharField(max_length=250)
     company = models.CharField(max_length=250)
-    industry = models.CharField(max_length=250)
-    start_date = models.DateField(blank=True)
+    industry = models.CharField(max_length=250, blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     until_now = models.BooleanField(default=False)
-    description = models.TextField(blank=True)
-    cv_id = models.ForeignKey(CV, related_name='works', blank=True, on_delete=models.CASCADE)
+    description = models.TextField(blank=True, null=True)
+    cv_id = models.ForeignKey(CV, related_name='works', blank=True, null=True, on_delete=models.CASCADE)
 
 
 class Education(BaseModel):
     grade = models.CharField(max_length=250)
     field_of_study = models.CharField(max_length=250)
     university = models.CharField(max_length=250)
-    start_date = models.DateField()
+    start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     until_now = models.BooleanField(default=False)
-    cv_id = models.ForeignKey(CV, related_name='educations', blank=True, on_delete=models.CASCADE)
+    gpa = models.FloatField(blank=True, null=True)
+    cv_id = models.ForeignKey(CV, related_name='educations', blank=True, null=True, on_delete=models.CASCADE)
 
 
 class Skill(BaseModel):
@@ -86,9 +86,9 @@ class Skill(BaseModel):
         ('4', '4'),
         ('5', '5'),
     )
-    skill = models.CharField(max_length=250)
-    level = models.CharField(max_length=1, choices=LEVEL_CHOICES)
-    cv_id = models.ForeignKey(CV, related_name='skills', blank=True, on_delete=models.CASCADE)
+    title = models.CharField(max_length=250)
+    level = models.CharField(max_length=1, blank=True, null=True, choices=LEVEL_CHOICES)
+    cv_id = models.ForeignKey(CV, related_name='skills', blank=True, null=True, on_delete=models.CASCADE)
 
 
 class Certificate(BaseModel):
@@ -96,19 +96,19 @@ class Certificate(BaseModel):
     institute = models.CharField(max_length=250)
     file = models.FileField(blank=True, upload_to='files/certificate/%Y/%d/%m/', null=True)
     issue_date = models.DateField()
-    expiration_date = models.DateField(blank=True)
-    description = models.TextField(blank=True)
-    cv_id = models.ForeignKey(CV, related_name='certificates', blank=True, on_delete=models.CASCADE)
+    expiration_date = models.DateField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    cv_id = models.ForeignKey(CV, related_name='certificates', blank=True, null=True, on_delete=models.CASCADE)
 
 
 class Project(BaseModel):
     title = models.CharField(max_length=250)
     link = models.URLField()
-    description = models.TextField(blank=True)
-    cv_id = models.ForeignKey(CV, related_name='projects', blank=True, on_delete=models.CASCADE)
+    description = models.TextField(blank=True, null=True)
+    cv_id = models.ForeignKey(CV, related_name='projects', blank=True, null=True, on_delete=models.CASCADE)
 
 
 class Link(BaseModel):
     title = models.CharField(max_length=250)
     link = models.URLField()
-    cv_id = models.ForeignKey(CV, related_name='links', blank=True, on_delete=models.CASCADE)
+    cv_id = models.ForeignKey(CV, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
