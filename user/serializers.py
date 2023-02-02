@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate
-from .models import User
+from .models import User, Profile
 from rest_framework import serializers
 
 
@@ -56,3 +56,34 @@ class ChangePasswordSerializer(serializers.Serializer):
     model = User
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'username', 'email']
+
+
+class ProfileSettingSerializer(serializers.ModelSerializer):
+    user = UserSerializer(source='user_id', read_only=True)
+    first_name = serializers.CharField(max_length=150, write_only=True)
+    last_name = serializers.CharField(max_length=150, write_only=True)
+    username = serializers.CharField(max_length=20, write_only=True)
+
+    class Meta:
+        model = Profile
+        fields = ['image', 'phone_number', 'user', 'first_name', 'last_name', 'username']
+
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        user = self.context['request'].user
+
+        if 'first_name' in validated_data:
+            user.first_name = validated_data['first_name']
+        if 'last_name' in validated_data:
+            user.last_name = validated_data['last_name']
+        if 'username' in validated_data:
+            user.username = validated_data['username']
+        user.save()
+        return instance
+

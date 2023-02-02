@@ -49,11 +49,16 @@ class User(AbstractUser):
     is_verified = models.BooleanField(default=False, null=True, blank=True)
 
 
+def get_upload_path(instance, filename):
+    ext = filename.split('.')[-1]
+    return f'image/user/{instance.pk}.{ext}'
+
+
 class Profile(BaseModel):
     user_id = models.OneToOneField('User', on_delete=models.CASCADE, related_name='profile')
-    image = models.ImageField(null=True, blank=True)  # should add upload to
+    image = models.ImageField(upload_to=get_upload_path, null=True, blank=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True, validators=[
-        RegexValidator(regex="/^(09|\\+989)\\d{9}$/", message='the phone number is wrong!')])
+        RegexValidator(regex=r"^(09|\+989)\d{9}$", message='the phone number is wrong!')])
 
 
 class FavoriteCVs(BaseModel):
