@@ -1,5 +1,7 @@
 from django.contrib.auth import authenticate
-from .models import User, Profile
+
+from cv.models import CV
+from .models import User, Profile, FavoriteCVs
 from rest_framework import serializers
 
 
@@ -86,4 +88,23 @@ class ProfileSettingSerializer(serializers.ModelSerializer):
             user.username = validated_data['username']
         user.save()
         return instance
+
+
+class FavoriteCVsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteCVs
+        fields = ['cv_id']
+
+
+class ProfileActivitySerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+    favorite_cvs = serializers.HyperlinkedRelatedField(view_name='resume_detail', source='favorite_cv', many=True, read_only=True)
+    cv = serializers.HyperlinkedIdentityField(view_name='resume_detail')
+
+    class Meta:
+        model = User
+        fields = ['user', 'favorite_cvs', 'cv']
+
+    def get_user(self, obj):
+        return UserSerializer(obj, read_only=True).data
 

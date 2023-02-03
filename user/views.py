@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializers import RegisterSerializer, ChangePasswordSerializer, LoginSerializer, ProfileSettingSerializer
+from .serializers import RegisterSerializer, ChangePasswordSerializer, LoginSerializer, ProfileSettingSerializer, ProfileActivitySerializer
 from rest_framework import generics
 from rest_framework import status
 from .models import User, Profile
@@ -87,4 +87,11 @@ class ProfileSettingRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return Profile.objects.get(user_id=self.request.user)
 
+
+class ProfileActivityRetrieveView(generics.RetrieveAPIView):
+    serializer_class = ProfileActivitySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
 
