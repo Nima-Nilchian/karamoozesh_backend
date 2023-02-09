@@ -1,7 +1,7 @@
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAdminUser
-from .permissions import IsStaffOrReadOnly
+from custom_permissions.permissions import IsStaffOrReadOnly
 from .models import CV, Link, Project, Certificate,\
     Skill, Education, Work, Language
 from .serializers import CvSerializers, LinkSerializers,\

@@ -1,5 +1,5 @@
 from rest_framework import generics
-from .permissions import IsStaffOrReadOnly
+from custom_permissions.permissions import IsStaffOrReadOnly
 from .models import Subject, Link
 from .serializers import SubjectSerializer, LinkSerializer
 
