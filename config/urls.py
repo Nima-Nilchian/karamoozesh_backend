@@ -38,6 +38,9 @@ urlpatterns = [
     path('api/user/', include('authentication.urls')),
     
     # cv
-    path('cv/', include('cv.urls')),
+    path('api/cv/', include('cv.urls')),
+
+    # skills
+    path('api/skills/', include('skills.urls'))
 
 ]
