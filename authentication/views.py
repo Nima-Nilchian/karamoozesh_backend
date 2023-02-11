@@ -5,7 +5,7 @@ from .serializers import RegisterSerializer, EmailSerializer,\
     ResetPasswordSerializer, LoginSerializer, ChangePasswordSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from user.models import User
+from user.models import User, Profile
 from .utils import Util
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import force_bytes
@@ -22,6 +22,7 @@ def registration_views(request):
 
         if serializer.is_valid():
             user = serializer.save()
+            Profile.objects.create(user_id=user)
             current_site = get_current_site(request).domain
 
             data = Util.email_verification_body(user, current_site)

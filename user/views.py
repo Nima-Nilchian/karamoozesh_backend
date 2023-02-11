@@ -1,9 +1,9 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializers import RegisterSerializer, ChangePasswordSerializer, LoginSerializer
+from .serializers import RegisterSerializer, ChangePasswordSerializer, LoginSerializer, ProfileSettingSerializer, ProfileActivitySerializer
 from rest_framework import generics
 from rest_framework import status
-from .models import User
+from .models import User, Profile
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 
@@ -74,3 +74,21 @@ class ChangePasswordView(generics.UpdateAPIView):
             return Response(response)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileSettingRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+    serializer_class = ProfileSettingSerializer
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['get', 'patch']
+
+    def get_object(self):
+        return Profile.objects.get(user_id=self.request.user)
+
+
+class ProfileActivityRetrieveView(generics.RetrieveAPIView):
+    serializer_class = ProfileActivitySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
