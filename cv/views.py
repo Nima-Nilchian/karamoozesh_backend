@@ -31,6 +31,20 @@ class CvDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAdminUser,)
 
 
+#  CV bank
+
+class CvBankView(generics.ListAPIView):
+    queryset = CV.objects.filter(is_active=True)
+    serializer_class = CvSerializers
+    filterset_fields = (
+        'gender', 'duty_system', 'martial_status',
+        'character', 'is_active', 'city',
+    )
+    search_fields = ('about_me', 'phone_number', 'address')
+    ordering_fields = ["created_time", "updated_time"]
+    ordering = ["-created_time"]
+
+
 # Link views
 
 class LinkListView(generics.ListCreateAPIView):
