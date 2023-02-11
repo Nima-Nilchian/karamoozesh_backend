@@ -1,13 +1,8 @@
-
 from django.core.mail import EmailMessage
-
 import threading
-
 from django.template.loader import get_template
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
-
-from user.models import User
 
 
 class EmailThread(threading.Thread):

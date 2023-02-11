@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializers import RegisterSerializer, ChangePasswordSerializer, LoginSerializer
@@ -8,7 +7,6 @@ from .models import User
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 
-# Create your views here.
 
 @api_view(['POST', ])
 def registration_views(request):
@@ -26,6 +24,7 @@ def registration_views(request):
             data = serializer.errors
 
         return Response(data)
+
 
 @api_view(['POST', ])
 def login_view(request):
@@ -45,9 +44,7 @@ def login_view(request):
         return Response(data)
 
 
-
 class ChangePasswordView(generics.UpdateAPIView):
-
     serializer_class = ChangePasswordSerializer
     model = User
     permission_classes = (IsAuthenticated,)

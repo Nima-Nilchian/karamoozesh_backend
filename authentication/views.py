@@ -1,9 +1,8 @@
-from rest_framework import generics, status, views, permissions
+from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
-
-from .serializers import RegisterSerializer, EmailSerializer, ResetPasswordSerializer, LoginSerializer, \
-    ChangePasswordSerializer
+from .serializers import RegisterSerializer, EmailSerializer,\
+    ResetPasswordSerializer, LoginSerializer, ChangePasswordSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from user.models import User
@@ -14,7 +13,6 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 
-# Create your views here.
 
 @api_view(['POST', ])
 def registration_views(request):
@@ -39,7 +37,7 @@ def registration_views(request):
         return Response(dataa, status=status.HTTP_201_CREATED)
 
 
-@api_view(['get'])
+@api_view(['GET'])
 def verify_email_view(request):
     if request.method == 'GET':
         token = request.GET.get('token')
@@ -74,7 +72,6 @@ def login_view(request):
 
 
 class ChangePasswordView(generics.UpdateAPIView):
-
     serializer_class = ChangePasswordSerializer
     model = User
     permission_classes = (IsAuthenticated,)
@@ -138,7 +135,6 @@ class ResetPasswordAPI(generics.GenericAPIView):
 
     def patch(self, request, *args, **kwargs):
         # Verify token & encoded_pk , and then reset the password.
-
         serializer = self.serializer_class(data=request.data, context={"kwargs": kwargs})
         serializer.is_valid(raise_exception=True)
 
