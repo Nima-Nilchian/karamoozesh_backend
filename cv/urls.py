@@ -7,6 +7,9 @@ urlpatterns = [
     path('', views.CvList.as_view(), name='resume_list'),
     path('<int:pk>/', views.CvDetail.as_view(), name='resume_detail'),
 
+    # cv-bank
+    path('bank/', views.CvBankView.as_view(), name='cv-bank'),
+
     # link
     path('<int:cv_id>/link/', views.LinkListView.as_view(), name='link_list'),
     path('<int:cv_id>/link/<int:link_id>/', views.LinkDetailView.as_view(), name='link_detail'),
