@@ -86,7 +86,6 @@ class ChangePasswordView(generics.UpdateAPIView):
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
-
             if not self.object.check_password(serializer.data.get("old_password")):
                 return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -121,8 +120,8 @@ class PasswordReset(generics.GenericAPIView):
             current_site = get_current_site(request=request).domain
             reset_link = 'http://' + current_site + reset_url
 
-            email_body = 'Hello, \n Use link below to reset your password  \n' + reset_link
-            data = {'email_body': email_body, 'to_email': user.email, 'email_subject': 'Reset your passsword'}
+            context_data = {'name': user.username, 'url': reset_link}
+            data = Util.password_reset_body(context_data, user.email)
 
             Util.send_email(data)
 
