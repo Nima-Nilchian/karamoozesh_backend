@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-from config.local_settings import *
+import smtplib
+# from config.local_settings import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -87,11 +88,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': DB_NAME,
-        'PASSWORD': DB_PASS,
-        'HOST': DB_HOST,
-        'USER': DB_USER,
-        'PORT': DB_PORT,
+        'NAME': 'karamoozesh_db',
+        'PASSWORD': 'kharazmi123456789',
+        'HOST': 'localhost',
+        'USER': 'b9',
+        'PORT': 3306,
     }
 }
 
@@ -181,3 +182,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_PORT = 587
+EMAIL_PORT_SSL = 465
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'amoozeshyar.khu@gmail.com'
+EMAIL_HOST_PASSWORD = 'etyjqrbmctzckilx'

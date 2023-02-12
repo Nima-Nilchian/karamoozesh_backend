@@ -31,14 +31,6 @@ class Util:
                 'email_subject': 'تایید ایمیل'}
         return data
 
-    @staticmethod
-    def password_reset_body(context_data, email):
-        html_tpl_path = 'index.html'
-        email_html_template = get_template(html_tpl_path).render(context_data)
-
-        data = {'email_body': email_html_template, 'to_email': email,
-                'email_subject': 'ریست پسورد'}
-        return data
 
     @staticmethod
     def send_email(data):
@@ -46,3 +38,4 @@ class Util:
             subject=data['email_subject'], body=data['email_body'], to=[data['to_email']])
         email.content_subtype = 'html'
         EmailThread(email).start()
+

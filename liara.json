@@ -1,0 +1,10 @@
+{
+    "platform": "django",
+    "app": "amoozeshyar",
+    "disks": [
+        {
+            "name": "media-disk",
+            "mountTo": "media"
+        }
+    ]
+}
