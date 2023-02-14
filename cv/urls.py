@@ -46,4 +46,6 @@ urlpatterns = [
         '<int:cv_id>/language/<int:language_id>/',
         views.LanguageDetailView.as_view(), name='language_detail'
     ),
+
+    path('get_cv-id/', views.cv_id_getter, name='get_cv-id'),
 ]

@@ -280,9 +280,15 @@ def cv_id_getter(request):
         token = request.META.get('HTTP_AUTHORIZATION')
         user_id = Token.objects.filter(key=token).first().user_id
         if user_id:
-            cv_id = CV.objects.filter(user_id=user_id).first().id
+            cv_id = CV.objects.filter(user_id=user_id)
             if cv_id:
+                cv_id = cv_id.first().id
                 return Response({"cv_id": cv_id}, status=status.HTTP_200_OK)
+
+            return Response({"message": "CV not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "User not found"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
