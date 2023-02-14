@@ -44,7 +44,7 @@ def verify_email_view(request):
         token = request.GET.get('token')
         user = Token.objects.filter(key=token)
         if user:
-            user = user.first()
+            user = user.first().user
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
