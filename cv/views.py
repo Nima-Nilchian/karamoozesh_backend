@@ -274,18 +274,20 @@ class LanguageDetailView(generics.RetrieveUpdateDestroyAPIView):
         return get_object_or_404(self.get_queryset(), pk=self.kwargs.get('language_id'))
 
 
-@api_view(['POST', ])
+@api_view(['GET', ])
 def cv_id_getter(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
         token = request.META.get('HTTP_AUTHORIZATION')
-        user_id = Token.objects.filter(key=token).first().user_id
+        user_id = Token.objects.filter(key=token)
         if user_id:
-            cv_id = CV.objects.filter(user_id=user_id).first().id
+            user_id = user_id.first().user_id
+            cv_id = CV.objects.filter(user_id=user_id)
             if cv_id:
+                cv_id = cv_id.first().id
                 return Response({"cv_id": cv_id}, status=status.HTTP_200_OK)
 
+            return Response({"message": "CV Not Found"}, status=status.HTTP_400_BAD_REQUEST)
 
-
-
+        return Response({"message": "User Not Found"}, status=status.HTTP_400_BAD_REQUEST)
 
 
