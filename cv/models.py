@@ -27,7 +27,7 @@ class CV(BaseModel):
     )
     firstname = models.CharField(max_length=250)
     lastname = models.CharField(max_length=250)
-    avatar = models.ImageField(upload_to='image/cv/avatar', blank=True, null=True)
+    avatar = models.ImageField(upload_to='media/cv/avatar', blank=True, null=True)
     about_me = models.TextField(blank=True, null=True)
     phone_number = models.BigIntegerField(blank=True, null=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
@@ -39,7 +39,7 @@ class CV(BaseModel):
     city = models.CharField(max_length=250)
     address = models.TextField(blank=True, null=True)
     suggested_salary = models.BigIntegerField(blank=True, null=True)
-    file = models.FileField(upload_to='files/cv/%Y/%m/%d/', blank=True, null=True)
+    file = models.FileField(upload_to='media/files/cv/%Y/%m/%d/', blank=True, null=True)
     is_active = models.BooleanField(default=False)
 
 
@@ -94,7 +94,7 @@ class Skill(BaseModel):
 class Certificate(BaseModel):
     title = models.CharField(max_length=250)
     institute = models.CharField(max_length=250)
-    file = models.FileField(blank=True, upload_to='files/certificate/%Y/%d/%m/', null=True)
+    file = models.FileField(blank=True, upload_to='media/files/certificate/%Y/%d/%m/', null=True)
     issue_date = models.DateField()
     expiration_date = models.DateField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
