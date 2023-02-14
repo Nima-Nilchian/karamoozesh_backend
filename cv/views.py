@@ -286,8 +286,9 @@ def cv_id_getter(request):
                 cv_id = cv_id.first().id
                 return Response({"cv_id": cv_id}, status=status.HTTP_200_OK)
 
-            return Response({"message": "CV Not Found"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "CV not found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({"message": "User Not Found"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "User not found"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
