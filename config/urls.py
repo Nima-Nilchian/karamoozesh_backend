@@ -41,6 +41,8 @@ urlpatterns = [
     path('api/cv/', include('cv.urls')),
 
     # skills
-    path('api/skills/', include('skills.urls'))
+    path('api/skills/', include('skills.urls')),
 
+    # talent survey
+    path('api/talent-survey/', include('talent_survey.urls')),
 ]
