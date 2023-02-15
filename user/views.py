@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializers import RegisterSerializer, ChangePasswordSerializer, LoginSerializer, ProfileSettingSerializer, ProfileActivitySerializer
+from .serializers import ProfileSettingSerializer, ProfileActivitySerializer
 from rest_framework import generics
 from rest_framework import status
 from .models import User, Profile
@@ -8,73 +8,16 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 
 
-@api_view(['POST', ])
-def registration_views(request):
-    if request.method == 'POST':
-        serializer = RegisterSerializer(data=request.data)
-        data = {}
+@api_view(['GET', ])
+def user_id_getter(request):
+    if request.method == 'GET':
+        token = request.META.get('HTTP_AUTHORIZATION')
+        user_id = Token.objects.filter(key=token)
+        if user_id:
+            user_id = user_id.first().user_id
+            return Response({"user_id": user_id}, status=status.HTTP_200_OK)
 
-        if serializer.is_valid():
-            account = serializer.save()
-            data['response'] = 'Registration Successfully'
-            data['username'] = account.username
-            data['email'] = account.email
-
-        else:
-            data = serializer.errors
-
-        return Response(data)
-
-
-@api_view(['POST', ])
-def login_view(request):
-    if request.method == 'POST':
-        data = {}
-
-        serializer = LoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-
-        data['response'] = 'Login Successfully'
-        data['username'] = serializer.validated_data['user'].username
-        data['token'] = token.key
-
-        return Response(data)
-
-
-class ChangePasswordView(generics.UpdateAPIView):
-    serializer_class = ChangePasswordSerializer
-    model = User
-    permission_classes = (IsAuthenticated,)
-
-    def get_object(self, queryset=None):
-        obj = self.request.user
-        return obj
-
-    def update(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        serializer = self.get_serializer(data=request.data)
-
-        if serializer.is_valid():
-
-            if not self.object.check_password(serializer.data.get("old_password")):
-                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
-
-            self.object.set_password(serializer.data.get("new_password"))
-            self.object.save()
-            response = {
-                'status': 'success',
-                'code': status.HTTP_200_OK,
-                'message': 'Password updated successfully',
-                'data': []
-            }
-
-            return Response(response)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        return Response({"message": "User Not Found"}, status=status.HTTP_400_BAD_REQUEST)
 
 class ProfileSettingRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSettingSerializer

@@ -1,6 +1,9 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from django.shortcuts import get_object_or_404
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.response import Response
 from custom_lib.permissions import IsStaffOrReadOnly
 from .models import CV, Link, Project, Certificate,\
     Skill, Education, Work, Language
@@ -284,3 +287,23 @@ class LanguageDetailView(generics.RetrieveUpdateDestroyAPIView):
                 pk=self.kwargs.get('language_id')
             )
         return get_object_or_404(self.get_queryset(), pk=self.kwargs.get('language_id'))
+
+
+@api_view(['GET', ])
+def cv_id_getter(request):
+    if request.method == 'GET':
+        token = request.META.get('HTTP_AUTHORIZATION')
+        user_id = Token.objects.filter(key=token)
+        if user_id:
+            user_id = user_id.first().user_id
+            cv_id = CV.objects.filter(user_id=user_id)
+            if cv_id:
+                cv_id = cv_id.first().id
+                return Response({"cv_id": cv_id}, status=status.HTTP_200_OK)
+
+            return Response({"message": "CV not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "User not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
