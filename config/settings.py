@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'talent_survey',
     'authentication',
     'consultation',
+    'ticket',
 
     'corsheaders',
 ]

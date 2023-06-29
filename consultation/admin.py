@@ -21,7 +21,3 @@ class SkillAdmin(admin.ModelAdmin):
     list_display = ['name']
 
 
-@admin.register(ConsultantSkills)
-class ConsultantSkillsAdmin(admin.ModelAdmin):
-    list_display = ['consultant_id', 'skill_id', 'skill_level']
-
