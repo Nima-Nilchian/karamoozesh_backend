@@ -20,7 +20,8 @@ def registration_views(request):
         serializer = RegisterSerializer(data=request.data)
         dataa = {}
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
+
             user = serializer.save()
             Profile.objects.create(user_id=user)
             current_site = get_current_site(request).domain
@@ -28,12 +29,11 @@ def registration_views(request):
             data = Util.email_verification_body(user, current_site)
             Util.send_email(data)
 
-            dataa['response'] = 'Registration Successfully'
             dataa['username'] = user.username
             dataa['email'] = user.email
 
         else:
-            dataa = serializer.errors
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(dataa, status=status.HTTP_201_CREATED)
 
@@ -65,11 +65,10 @@ def login_view(request):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
 
-        data['response'] = 'Login Successfully'
         data['username'] = serializer.validated_data['user'].username
         data['token'] = token.key
 
-        return Response(data)
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class ChangePasswordView(generics.UpdateAPIView):
@@ -93,12 +92,11 @@ class ChangePasswordView(generics.UpdateAPIView):
             self.object.save()
             response = {
                 'status': 'success',
-                'code': status.HTTP_200_OK,
                 'message': 'Password updated successfully',
                 'data': []
             }
 
-            return Response(response)
+            return Response(response, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
