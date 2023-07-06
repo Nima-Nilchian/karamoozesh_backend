@@ -10,7 +10,7 @@ class Consultant(BaseModel):
         RegexValidator(regex=r"^(09|\+989)\d{9}$", message='the phone number is wrong!')])
 
     def __str__(self):
-        return f'{self.user_id.first_name} {self.user_id.last_name}'
+        return f'{self.user_id}: {self.user_id.first_name} {self.user_id.last_name}'
 
 
 class Skill(BaseModel):

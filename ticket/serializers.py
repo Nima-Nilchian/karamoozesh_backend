@@ -1,22 +1,23 @@
 from rest_framework import serializers
 from .models import Ticket, TicketTag, QA
 from consultation.serializers import ConsultantSerializers
+from consultation.models import Consultant
 from user.serializers import UserSerializer
 
 
 class QASerializers(serializers.ModelSerializer):
-    consultant = ConsultantSerializers(source='user_id', read_only=True)
+    consultant = ConsultantSerializers(source='consultant_id', read_only=True)
     user = UserSerializer(source='user_id', read_only=True)
 
     class Meta:
         model = QA
         fields = [
             'ticket_id',
-            'consultant_id',
-            'consultant',
-            'question',
             'user_id',
             'user',
+            'question',
+            'consultant_id',
+            'consultant',
             'answer',
             'last_time_question',
             'last_time_answer',
