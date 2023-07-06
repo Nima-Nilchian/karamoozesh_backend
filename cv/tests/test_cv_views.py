@@ -4,6 +4,7 @@ from rest_framework import status
 from cv.models import *
 from user.models import User
 
+
 class TestViews(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='test_user', password='secret',email="test@gmail.com")
@@ -52,7 +53,7 @@ class TestViews(APITestCase):
     def test_not_get_cvs_with_no_auth(self):
         url = reverse('resume_list')
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_cv_with_no_auth(self):
         url = reverse('resume_list')
@@ -62,7 +63,7 @@ class TestViews(APITestCase):
             "city":"test",
         }
         response = self.client.post(url, data=data, format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_cv_with_invalid_data(self):
         self.client.force_login(self.user)
@@ -100,7 +101,7 @@ class TestViews(APITestCase):
 
     def test_not_get_cv_detail_with_no_auth(self):
         response = self.client.get(reverse('resume_detail', args=[self.cv.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_update_cv(self):
         self.client.force_login(self.user)
@@ -115,7 +116,7 @@ class TestViews(APITestCase):
             "firstname":"test_2","lastname":"test_2",
         }
         response = self.client.patch(reverse('resume_detail', args=[self.cv.id]), data=data , format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_update_cv_with_incorrect_data(self):
         self.client.force_login(self.user)
@@ -133,7 +134,7 @@ class TestViews(APITestCase):
 
     def test_not_delete_cv_with_no_auth(self):
         response = self.client.delete(reverse('resume_detail',args=[self.cv.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     # test LinkList view
 
@@ -146,7 +147,7 @@ class TestViews(APITestCase):
     def test_not_get_links_with_no_auth(self):
         url = reverse('link_list',args=[self.cv.id])
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_link_with_no_auth(self):
         url = reverse('link_list',args=[self.cv.id])
@@ -155,7 +156,7 @@ class TestViews(APITestCase):
             "cv_id":self.cv.id
         }
         response = self.client.post(url, data=data, format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_link_with_invalid_data(self):
         self.client.force_login(self.user)
@@ -191,7 +192,7 @@ class TestViews(APITestCase):
 
     def test_not_get_link_detail_with_no_auth(self):
         response = self.client.get(reverse('link_detail', args=[self.cv.id,self.link.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_update_link(self):
         self.client.force_login(self.user)
@@ -206,7 +207,7 @@ class TestViews(APITestCase):
             "title":"test_2","link":"https://www.varzesh3.com/",
         }
         response = self.client.patch(reverse('link_detail', args=[self.cv.id,self.link.id]), data=data , format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_update_link_with_incorrect_data(self):
         self.client.force_login(self.user)
@@ -224,7 +225,7 @@ class TestViews(APITestCase):
 
     def test_not_delete_link_with_no_auth(self):
         response = self.client.delete(reverse('link_detail',args=[self.cv.id,self.link.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     # test ProjectList view
 
@@ -237,7 +238,7 @@ class TestViews(APITestCase):
     def test_not_get_projects_with_no_auth(self):
         url = reverse('project_list',args=[self.cv.id])
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_project_with_no_auth(self):
         url = reverse('project_list',args=[self.cv.id])
@@ -246,7 +247,7 @@ class TestViews(APITestCase):
             "description":"test test","cv_id":self.cv.id
         }
         response = self.client.post(url, data=data, format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_project_with_invalid_data(self):
         self.client.force_login(self.user)
@@ -282,7 +283,7 @@ class TestViews(APITestCase):
 
     def test_not_get_project_detail_with_no_auth(self):
         response = self.client.get(reverse('project_detail', args=[self.cv.id,self.project.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_update_project(self):
         self.client.force_login(self.user)
@@ -297,7 +298,7 @@ class TestViews(APITestCase):
             "title":"test_2","link":"https://www.varzesh3.com/",
         }
         response = self.client.patch(reverse('project_detail', args=[self.cv.id,self.project.id]), data=data , format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_update_project_with_incorrect_data(self):
         self.client.force_login(self.user)
@@ -315,7 +316,7 @@ class TestViews(APITestCase):
 
     def test_not_delete_project_with_no_auth(self):
         response = self.client.delete(reverse('project_detail',args=[self.cv.id,self.project.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     # test CertificateList view
 
@@ -328,7 +329,7 @@ class TestViews(APITestCase):
     def test_not_get_certificates_with_no_auth(self):
         url = reverse('certificate_list',args=[self.cv.id])
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_certificate_with_no_auth(self):
         url = reverse('certificate_list',args=[self.cv.id])
@@ -337,7 +338,7 @@ class TestViews(APITestCase):
             "issue_date":"2023-07-01","cv_id":self.cv.id
         }
         response = self.client.post(url, data=data, format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_certificate_with_invalid_data(self):
         self.client.force_login(self.user)
@@ -373,7 +374,7 @@ class TestViews(APITestCase):
 
     def test_not_get_certificate_detail_with_no_auth(self):
         response = self.client.get(reverse('certificate_detail', args=[self.cv.id,self.certificate.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_update_certificate(self):
         self.client.force_login(self.user)
@@ -388,7 +389,7 @@ class TestViews(APITestCase):
             "title":"test_2","issue_date":"2022-07-01"
         }
         response = self.client.patch(reverse('certificate_detail', args=[self.cv.id,self.certificate.id]), data=data , format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_update_certificate_with_incorrect_data(self):
         self.client.force_login(self.user)
@@ -406,7 +407,7 @@ class TestViews(APITestCase):
 
     def test_not_delete_certificate_with_no_auth(self):
         response = self.client.delete(reverse('certificate_detail',args=[self.cv.id,self.certificate.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     # test SkillList view
 
@@ -419,7 +420,7 @@ class TestViews(APITestCase):
     def test_not_get_skills_with_no_auth(self):
         url = reverse('skill_list', args=[self.cv.id])
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_skill_with_no_auth(self):
         url = reverse('skill_list', args=[self.cv.id])
@@ -428,7 +429,7 @@ class TestViews(APITestCase):
             "cv_id":self.cv.id,
         }
         response = self.client.post(url, data=data, format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_skill_with_invalid_data(self):
         self.client.force_login(self.user)
@@ -464,7 +465,7 @@ class TestViews(APITestCase):
 
     def test_not_get_skill_detail_with_no_auth(self):
         response = self.client.get(reverse('skill_detail', args=[self.cv.id,self.skill.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_update_skill(self):
         self.client.force_login(self.user)
@@ -479,7 +480,7 @@ class TestViews(APITestCase):
             "title":"test","level":"4"
         }
         response = self.client.patch(reverse('skill_detail', args=[self.cv.id,self.skill.id]), data=data , format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_update_skill_with_incorrect_data(self):
         self.client.force_login(self.user)
@@ -497,7 +498,7 @@ class TestViews(APITestCase):
 
     def test_not_delete_skill_with_no_auth(self):
         response = self.client.delete(reverse('skill_detail',args=[self.cv.id,self.skill.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     # test EducationList view
 
@@ -510,7 +511,7 @@ class TestViews(APITestCase):
     def test_not_get_educations_with_no_auth(self):
         url = reverse('education_list', args=[self.cv.id])
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_education_with_no_auth(self):
         url = reverse('education_list', args=[self.cv.id])
@@ -519,7 +520,7 @@ class TestViews(APITestCase):
             "university":"test","cv_id":self.cv.id,
         }
         response = self.client.post(url, data=data, format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_education_with_invalid_data(self):
         self.client.force_login(self.user)
@@ -555,7 +556,7 @@ class TestViews(APITestCase):
 
     def test_not_get_education_detail_with_no_auth(self):
         response = self.client.get(reverse('education_detail', args=[self.cv.id,self.education.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_update_education(self):
         self.client.force_login(self.user)
@@ -570,7 +571,7 @@ class TestViews(APITestCase):
             "grade":"test_1","university":"test3"
         }
         response = self.client.patch(reverse('education_detail', args=[self.cv.id,self.education.id]), data=data , format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_update_education_with_incorrect_data(self):
         self.client.force_login(self.user)
@@ -588,7 +589,7 @@ class TestViews(APITestCase):
 
     def test_not_delete_education_with_no_auth(self):
         response = self.client.delete(reverse('education_detail',args=[self.cv.id,self.education.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     # test WorkList view
 
@@ -601,7 +602,7 @@ class TestViews(APITestCase):
     def test_not_get_works_with_no_auth(self):
         url = reverse('work_list', args=[self.cv.id])
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_work_with_no_auth(self):
         url = reverse('work_list', args=[self.cv.id])
@@ -609,7 +610,7 @@ class TestViews(APITestCase):
             "title": "test", "company": "test", "cv_id": self.cv.id,
         }
         response = self.client.post(url, data=data, format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_work_with_invalid_data(self):
         self.client.force_login(self.user)
@@ -643,7 +644,7 @@ class TestViews(APITestCase):
 
     def test_not_get_work_detail_with_no_auth(self):
         response = self.client.get(reverse('work_detail', args=[self.cv.id,self.work.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_update_work(self):
         self.client.force_login(self.user)
@@ -658,7 +659,7 @@ class TestViews(APITestCase):
             "title":"test_1","company":"test3"
         }
         response = self.client.patch(reverse('work_detail', args=[self.cv.id,self.work.id]), data=data , format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_update_work_with_incorrect_data(self):
         self.client.force_login(self.user)
@@ -676,7 +677,7 @@ class TestViews(APITestCase):
 
     def test_not_delete_work_with_no_auth(self):
         response = self.client.delete(reverse('work_detail',args=[self.cv.id,self.work.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     # test LanguageList view
 
@@ -689,7 +690,7 @@ class TestViews(APITestCase):
     def test_not_get_languages_with_no_auth(self):
         url = reverse('language_list', args=[self.cv.id])
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_language_with_no_auth(self):
         url = reverse('work_list', args=[self.cv.id])
@@ -697,7 +698,7 @@ class TestViews(APITestCase):
             "title": "test", "level": "1", "cv_id": self.cv.id,
         }
         response = self.client.post(url, data=data, format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_create_language_with_invalid_data(self):
         self.client.force_login(self.user)
@@ -731,7 +732,7 @@ class TestViews(APITestCase):
 
     def test_not_get_language_detail_with_no_auth(self):
         response = self.client.get(reverse('language_detail', args=[self.cv.id,self.language.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_update_language(self):
         self.client.force_login(self.user)
@@ -746,7 +747,7 @@ class TestViews(APITestCase):
             "title":"test_1","level":"test3"
         }
         response = self.client.patch(reverse('language_detail', args=[self.cv.id,self.language.id]), data=data , format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_not_update_language_with_incorrect_data(self):
         self.client.force_login(self.user)
@@ -764,4 +765,4 @@ class TestViews(APITestCase):
 
     def test_not_delete_language_with_no_auth(self):
         response = self.client.delete(reverse('language_detail',args=[self.cv.id,self.language.id]))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
