@@ -20,18 +20,20 @@ class Ticket(BaseModel):
     title = models.CharField(max_length=200, null=False, blank=False)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='A')
     phone_number = models.CharField(max_length=20, null=True, blank=True, validators=[
-        RegexValidator(regex=r"^(09|\+989)\d{9}$", message='the phone number is wrong!')])
+        RegexValidator(regex=r"^(09|\+989)\d{9}$", message='the phone number is wrong!')
+    ])
     meeting_date = models.DateTimeField(null=True, blank=True)
     skill_level = models.CharField(max_length=1, choices=LEVEL_CHOICES, null=True, blank=True)
 
 
 class QA(BaseModel):
-    user_id = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, related_name='QA', null=True, blank=True)
+    user_id = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='QA')
     question = models.TextField()
-    consultant_id = models.ForeignKey(Consultant, on_delete=models.SET_NULL, related_name='QA', null=True, blank=True)
+    consultant_id = models.ForeignKey(Consultant, on_delete=models.CASCADE, related_name='QA')
     answer = models.TextField(null=True, blank=True)
     last_time_question = models.DateTimeField(auto_now_add=True)
     last_time_answer = models.DateTimeField(null=True, blank=True)
+    ticket_id = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='QA')
 
 
 class TicketTag(BaseModel):
