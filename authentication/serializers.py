@@ -15,6 +15,16 @@ class RegisterSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({'error': 'p1 and p2 should be same!'})
+
+        if User.objects.filter(email=attrs['email']).exists():
+            raise serializers.ValidationError({'error': 'Email Already exists!'})
+
+        return attrs
+
+
     def save(self):
         password = self.validated_data['password']
         password2 = self.validated_data['password2']
