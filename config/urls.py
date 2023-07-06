@@ -48,4 +48,7 @@ urlpatterns = [
 
     # consultation
     path('api/consultation/', include('consultation.urls')),
+
+    # ticket
+    path('api/ticket/', include('ticket.urls')),
 ]

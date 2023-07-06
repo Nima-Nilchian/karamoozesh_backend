@@ -27,13 +27,19 @@ class Ticket(BaseModel):
 
 
 class QA(BaseModel):
-    user_id = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='QA')
+    user_id = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name='QA', null=True, blank=True
+    )
     question = models.TextField()
-    consultant_id = models.ForeignKey(Consultant, on_delete=models.CASCADE, related_name='QA')
+    consultant_id = models.ForeignKey(
+        Consultant, on_delete=models.CASCADE, related_name='QA', null=True, blank=True
+    )
     answer = models.TextField(null=True, blank=True)
     last_time_question = models.DateTimeField(auto_now_add=True)
     last_time_answer = models.DateTimeField(null=True, blank=True)
-    ticket_id = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='QA')
+    ticket_id = models.ForeignKey(
+        Ticket, on_delete=models.CASCADE, related_name='QA', null=True, blank=True
+    )
 
 
 class TicketTag(BaseModel):
