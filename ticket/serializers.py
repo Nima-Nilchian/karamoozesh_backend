@@ -11,7 +11,6 @@ class QASerializers(serializers.ModelSerializer):
     class Meta:
         model = QA
         fields = [
-            'id',
             'ticket_id',
             'consultant_id',
             'consultant',
@@ -49,12 +48,10 @@ class TicketSerializers(serializers.ModelSerializer):
             'status',
             'meeting_date',
             'skill_level',
-            'created_time',
-            'updated_time',
-            'last_time_question',
-            'last_time_answer',
             'qa',
             'tag',
+            'created_time',
+            'updated_time',
         ]
 
 
