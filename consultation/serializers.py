@@ -10,6 +10,7 @@ class ConsultantSerializers(serializers.ModelSerializer):
         model = Consultant
         fields = [
             'id',
+            'user_id',
             'user',
             'phone_number',
         ]
