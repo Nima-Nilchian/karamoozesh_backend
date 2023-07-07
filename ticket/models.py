@@ -7,41 +7,52 @@ from django.contrib.auth import get_user_model
 
 class Ticket(BaseModel):
     LEVEL_CHOICES = (
-        ('1', '1'),
-        ('2', '2'),
-        ('3', '3'),
-        ('4', '4'),
-        ('5', '5'),
+        ('1', 'آشنا نیستم'),
+        ('2', 'تا حدودی آشنایی دارم'),
+        ('3', 'کاملا آشنا هستم')
     )
     STATUS_CHOICES = (
-        ('A', 'Active'),
-        ('E', 'Ended')
+        ('1', 'درحال بررسی'),
+        ('2', 'پاسخ داده شده'),
+        ('3', 'اتمام مکالمه')
     )
     title = models.CharField(max_length=200, null=False, blank=False)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='A')
-    phone_number = models.CharField(max_length=20, null=True, blank=True, validators=[
-        RegexValidator(regex=r"^(09|\+989)\d{9}$", message='the phone number is wrong!')
-    ])
-    meeting_date = models.DateTimeField(null=True, blank=True)
-    skill_level = models.CharField(max_length=1, choices=LEVEL_CHOICES, null=True, blank=True)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='1')
+    meeting_date = models.DateField(null=True, blank=True)
+    skill_level = models.CharField(max_length=1, choices=LEVEL_CHOICES, default='1')
 
 
-class QA(BaseModel):
+class Question(BaseModel):
+    ticket_id = models.ForeignKey(
+        Ticket, on_delete=models.CASCADE, related_name='question', null=True, blank=True
+    )
     user_id = models.ForeignKey(
-        get_user_model(), on_delete=models.CASCADE, related_name='QA', null=True, blank=True
+        get_user_model(), on_delete=models.CASCADE, related_name='question', null=True, blank=True
     )
     question = models.TextField()
+
+
+class Answer(BaseModel):
+    ticket_id = models.ForeignKey(
+        Ticket, on_delete=models.CASCADE, related_name='answer', null=True, blank=True
+    )
     consultant_id = models.ForeignKey(
-        Consultant, on_delete=models.CASCADE, related_name='QA', null=True, blank=True
+        Consultant, on_delete=models.CASCADE, related_name='answer', null=True, blank=True
     )
     answer = models.TextField(null=True, blank=True)
-    last_time_question = models.DateTimeField(auto_now_add=True)
-    last_time_answer = models.DateTimeField(null=True, blank=True)
-    ticket_id = models.ForeignKey(
-        Ticket, on_delete=models.CASCADE, related_name='QA', null=True, blank=True
+
+
+class Tag(BaseModel):
+    TAG_CHOICES = (
+        ('html', 'اچ تی ام ال'),
+        ('css', 'سی اس اس'),
+        ('javascript', 'جاوا اسکریپت'),
+        ('typescript', 'تایپ اسکریپت'),
+        ('frontend', 'فرانت اند'),
+        ('python', 'پایتون'),
+        ('backend', 'بک اند'),
+        ('ai', 'هوش مصنوعی'),
+        ('nlp', 'ان ال پی')
     )
-
-
-class TicketTag(BaseModel):
     ticket_id = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='ticket_tags')
-    tag = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name='ticket_tags')
+    name = models.CharField(max_length=50, choices=TAG_CHOICES)
