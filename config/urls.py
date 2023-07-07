@@ -45,4 +45,10 @@ urlpatterns = [
 
     # talent survey
     path('api/talent-survey/', include('talent_survey.urls')),
+
+    # consultation
+    path('api/consultation/', include('consultation.urls')),
+
+    # ticket
+    path('api/ticket/', include('ticket.urls')),
 ]
