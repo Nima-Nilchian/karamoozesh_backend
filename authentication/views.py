@@ -67,6 +67,10 @@ def login_view(request):
 
         data['username'] = serializer.validated_data['user'].username
         data['token'] = token.key
+        if user.is_consultant:
+            data['role'] = 2
+        else:
+            data['role'] = 1
 
         return Response(data, status=status.HTTP_200_OK)
 

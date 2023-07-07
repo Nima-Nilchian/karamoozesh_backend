@@ -1,22 +1,27 @@
 from django.contrib import admin
 from django.contrib.admin import register
-from .models import Ticket, TicketTag, QA
+from .models import *
 
 
 class TicketTagInline(admin.TabularInline):
-    model = TicketTag
+    model = Tag
     extra = 1
 
 
-class QAInline(admin.StackedInline):
-    model = QA
+class QuestionInline(admin.TabularInline):
+    model = Question
+    extra = 1
+
+
+class AnswerInline(admin.TabularInline):
+    model = Answer
     extra = 1
 
 
 @register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
     list_display = (
-        'title', 'status', 'phone_number',
+        'title', 'status',
         'meeting_date', 'skill_level'
     )
     list_filter = (
@@ -24,12 +29,12 @@ class TicketAdmin(admin.ModelAdmin):
     )
     list_display_links = ('title',)
     list_editable = ('status',)
-    search_fields = ('title', 'status', 'phone_number', 'meeting_date')
+    search_fields = ('title', 'status', 'meeting_date')
 
     @staticmethod
     def full_name(obj):
         return f'{obj.firstname} {obj.lastname}'
 
     inlines = (
-        TicketTagInline, QAInline
+        TicketTagInline, QuestionInline, AnswerInline
     )
