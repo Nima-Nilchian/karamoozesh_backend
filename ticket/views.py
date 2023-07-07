@@ -1,6 +1,6 @@
 from rest_framework import generics
 from .models import Ticket, QA, TicketTag
-from .serializers import TicketSerializers, TicketTagSerializers, QASerializers
+from .serializers import TicketSerializers, TicketTagSerializers, QASerializers, TicketCreateSerializer
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 
@@ -67,5 +67,11 @@ class TicketTagDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TicketTagSerializers
     # permission_classes = (IsAdminUser,)
     permission_classes = (IsAuthenticated,)
+
+
+class TicketCreateView(generics.CreateAPIView):
+    serializer_class = TicketCreateSerializer
+    # permission_classes = [IsAuthenticated]
+
 
 

@@ -1,11 +1,11 @@
 from django.urls import path
 from . import views
 
-
 urlpatterns = [
     # ticket
-    path('ticket/', views.TicketList.as_view(), name='ticket-list'),
-    path('ticket/<int:pk>/', views.TicketDetail.as_view(), name='ticket-detail'),
+    # path('', views.TicketList.as_view(), name='ticket-list'),
+    path('<int:pk>/', views.TicketDetail.as_view(), name='ticket-detail'),
+    path('', views.TicketCreateView.as_view(), name='create-ticket'),
 
     # skill
     path('qa/', views.QAList.as_view(), name='qa-list'),
