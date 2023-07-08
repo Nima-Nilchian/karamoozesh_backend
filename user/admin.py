@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import register
+from django.contrib.auth.admin import UserAdmin
 from .models import User, Profile, FavoriteCVs, UserSurvey
 
 
@@ -18,7 +19,7 @@ class SurveyInline(admin.TabularInline):
 
 
 @register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(UserAdmin):
     list_display = ('id', 'email', 'is_active')
     list_display_links = ('id', 'email')
     list_filter = ('is_active',)
