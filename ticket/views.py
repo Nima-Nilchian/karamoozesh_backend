@@ -72,6 +72,8 @@ from consultation.permissions import IsConsultant
 class TicketCreateView(generics.CreateAPIView):
     serializer_class = TicketCreateSerializer
     permission_classes = [IsAuthenticated]
+    search_fields = ('tag', 'title')
+
 
 
 
