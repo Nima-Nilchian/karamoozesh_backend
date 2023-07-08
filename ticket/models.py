@@ -1,4 +1,3 @@
-from django.core.validators import RegexValidator
 from django.db import models
 from custom_lib.models import BaseModel
 from consultation.models import Skill, Consultant
@@ -24,22 +23,22 @@ class Ticket(BaseModel):
 
 class Question(BaseModel):
     ticket_id = models.ForeignKey(
-        Ticket, on_delete=models.CASCADE, related_name='question', null=True, blank=True
+        Ticket, on_delete=models.CASCADE, related_name='question'
     )
     user_id = models.ForeignKey(
-        get_user_model(), on_delete=models.CASCADE, related_name='question', null=True, blank=True
+        get_user_model(), on_delete=models.CASCADE, related_name='question'
     )
     question = models.TextField()
 
 
 class Answer(BaseModel):
     ticket_id = models.ForeignKey(
-        Ticket, on_delete=models.CASCADE, related_name='answer', null=True, blank=True
+        Ticket, on_delete=models.CASCADE, related_name='answer'
     )
     consultant_id = models.ForeignKey(
-        Consultant, on_delete=models.CASCADE, related_name='answer', null=True, blank=True
+        Consultant, on_delete=models.CASCADE, related_name='answer'
     )
-    answer = models.TextField(null=True, blank=True)
+    answer = models.TextField()
 
 
 class Tag(BaseModel):
