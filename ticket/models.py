@@ -3,6 +3,8 @@ from custom_lib.models import BaseModel
 from consultation.models import Skill, Consultant
 from django.contrib.auth import get_user_model
 
+from user.models import User
+
 
 class Ticket(BaseModel):
     LEVEL_CHOICES = (
@@ -15,10 +17,16 @@ class Ticket(BaseModel):
         ('2', 'پاسخ داده شده'),
         ('3', 'اتمام مکالمه')
     )
+    CONTACTWAY_CHOICES = (
+        ('1', 'مشاوره تلفنی'),
+        ('2', 'پیامک'),
+        ('3', 'ایمیل')
+    )
     title = models.CharField(max_length=200, null=False, blank=False)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='1')
     meeting_date = models.DateField(null=True, blank=True)
-    skill_level = models.CharField(max_length=1, choices=LEVEL_CHOICES, default='1')
+    skill_level = models.CharField(max_length=1, choices=LEVEL_CHOICES, null=True, blank=True)
+    contact_way = models.CharField(max_length=1, choices=CONTACTWAY_CHOICES, null=True, blank=True)
 
 
 class Question(BaseModel):
@@ -26,7 +34,7 @@ class Question(BaseModel):
         Ticket, on_delete=models.CASCADE, related_name='question'
     )
     user_id = models.ForeignKey(
-        get_user_model(), on_delete=models.CASCADE, related_name='question'
+        User, on_delete=models.CASCADE, related_name='question', null=True, blank=True
     )
     question = models.TextField()
 
