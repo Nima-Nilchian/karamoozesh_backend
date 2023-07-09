@@ -48,4 +48,5 @@ urlpatterns = [
     ),
 
     path('get_cv-id/', views.cv_id_getter, name='get_cv-id'),
+    path('<int:cv_id>/upload-image/', views.CvImageView.as_view(), name='upload-cv-image')
 ]

@@ -73,6 +73,7 @@ from django.views import View
 #     # permission_classes = (IsAdminUser,)
 #     permission_classes = (IsAuthenticated,)
 
+
 @csrf_exempt
 def TicketCreateView(request):
     data = json.loads(request.body)
@@ -86,6 +87,7 @@ def TicketCreateView(request):
     for tag_name in data.get('tags', None):
         Tag.objects.create(name=tag_name, ticket_id=ticket)
     return JsonResponse(data={'ticket_id': ticket.id})
+
 
 
 
