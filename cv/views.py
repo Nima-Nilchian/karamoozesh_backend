@@ -11,7 +11,8 @@ from .serializers import CvSerializers, LinkSerializers,\
     ProjectSerializers, CertificateSerializers,\
     SkillSerializers, EducationSerializers,\
     WorkSerializers, LanguageSerializers
-
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser
 
 # CV views
 
@@ -307,3 +308,14 @@ def cv_id_getter(request):
 
 
 
+class CvImageView(APIView):
+    parser_classes = [MultiPartParser]
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, cv_id, format=None):
+        uploaded_image = request.FILES['image']
+        cv = CV.objects.get(id=cv_id)
+        cv.avatar = uploaded_image
+        cv.save()
+
+        return Response('Photo uploaded successfully',status=status.HTTP_200_OK)
