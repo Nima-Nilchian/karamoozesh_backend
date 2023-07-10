@@ -1,8 +1,8 @@
 from django.contrib.auth import authenticate
-
 from cv.models import CV
 from .models import User, Profile, FavoriteCVs
 from rest_framework import serializers
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,4 +51,3 @@ class ProfileActivitySerializer(serializers.ModelSerializer):
 
     def get_user(self, obj):
         return UserSerializer(obj, read_only=True).data
-
