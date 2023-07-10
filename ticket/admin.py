@@ -22,10 +22,10 @@ class AnswerInline(admin.TabularInline):
 class TicketAdmin(admin.ModelAdmin):
     list_display = (
         'title', 'status',
-        'meeting_date', 'skill_level'
+        'meeting_date',
     )
     list_filter = (
-        'status', 'skill_level'
+        'status', 'skill_level', 'contact_way'
     )
     list_display_links = ('title',)
     list_editable = ('status',)
