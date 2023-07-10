@@ -26,5 +26,9 @@ def TicketCreateView(request):
     return JsonResponse(data={'ticket_id': ticket.id})
 
 
+class TicketSendMessageView(generics.CreateAPIView):
+    serializer_class = TicketSendMessageSerializer
+    permission_classes = [IsAuthenticated]
+
 
 
