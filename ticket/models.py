@@ -51,15 +51,15 @@ class Answer(BaseModel):
 
 class Tag(BaseModel):
     TAG_CHOICES = (
-        ('html', 'اچ تی ام ال'),
-        ('css', 'سی اس اس'),
-        ('javascript', 'جاوا اسکریپت'),
-        ('typescript', 'تایپ اسکریپت'),
-        ('frontend', 'فرانت اند'),
-        ('python', 'پایتون'),
-        ('backend', 'بک اند'),
-        ('ai', 'هوش مصنوعی'),
-        ('nlp', 'ان ال پی')
+        ('اچ تی ام ال', 'اچ تی ام ال'),
+        ('سی اس اس', 'سی اس اس'),
+        ('جاوا اسکریپت', 'جاوا اسکریپت'),
+        ('تایپ اسکریپت', 'تایپ اسکریپت'),
+        ('فرانت اند', 'فرانت اند'),
+        ('پایتون', 'پایتون'),
+        ('بک اند', 'بک اند'),
+        ('هوش مصنوعی', 'هوش مصنوعی'),
+        ('ان ال پی', 'ان ال پی')
     )
     ticket_id = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='ticket_tags')
     name = models.CharField(max_length=50, choices=TAG_CHOICES)

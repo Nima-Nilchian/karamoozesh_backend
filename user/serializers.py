@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate
 
 from cv.models import CV
+from ticket.models import Ticket
 from .models import User, Profile, FavoriteCVs
 from rest_framework import serializers
 

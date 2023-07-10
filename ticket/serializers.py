@@ -15,37 +15,40 @@ class TagSerializer(serializers.ModelSerializer):
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ['question']
+        fields = ['created_time', 'question', 'user_id']
 
 
-class TicketCreateSerializer(serializers.ModelSerializer):
-    question = QuestionSerializer()
+class AnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ['created_time', 'answer', 'consultant_id']
+
+
+class TicketListSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, source='ticket_tags')
+    phone_number = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
+    last_date = serializers.SerializerMethodField()
+    messages = serializers.SerializerMethodField()
 
     class Meta:
         model = Ticket
-        fields = ['id', 'title', 'question', 'tags', 'skill_level', 'meeting_date', 'contact_way', 'status']
-        write_only_fields = ['title', 'question', 'tags', 'skill_level', 'meeting_date', 'contact_way']
+        fields = ['id', 'title', 'status', 'tags', 'meeting_date', 'skill_level', 'contact_way',
+                  'email', 'phone_number', 'last_date', 'messages']
 
-    # def save(self, **kwargs):
-    #     ticket = Ticket.objects.create(title=self.validated_data['title'],
-    #                                    skill_level=self.validated_data.get('skill_level', None),
-    #                                    meeting_date=self.validated_data.get('meeting_date', None),
-    #                                    contact_way=self.validated_data.get('contact_way', None))
-    #     Question.objects.create(user_id=self.context['request'].user,
-    #                             question=self.validated_data['question'],
-    #                             ticket_id=ticket)
-    #     for tag_name in self.validated_data.get('tags', None):
-    #         Tag.objects.create(name=tag_name, ticket_id=ticket)
+    def get_last_date(self, instance):
+        return instance.answer.order_by('created_time').last().created_time
 
-    # def create(self, validated_data):
-    #     ticket = Ticket.objects.create(title=validated_data['title'],
-    #                                    skill_level=validated_data.get('skill_level', None),
-    #                                    meeting_date=validated_data.get('meeting_date', None),
-    #                                    contact_way=validated_data.get('contact_way', None))
-    #     Question.objects.create(user_id=self.context['request'].user,
-    #                             question=validated_data['question'],
-    #                             ticket_id=ticket)
-    #     for tag_name in validated_data.get('tags', None):
-    #         Tag.objects.create(name=tag_name, ticket_id=ticket)
-    #     return ticket
+    def get_email(self, instance):
+        return instance.question.first().user_id.email
+
+    def get_phone_number(self, instance):
+        return instance.question.first().user_id.profile.phone_number
+
+    def get_messages(self, instance):
+        questions = QuestionSerializer(many=True, instance=Question.objects.filter(ticket_id=instance)).data
+        answers = AnswerSerializer(many=True, instance=Answer.objects.filter(ticket_id=instance)).data
+        combined_list = answers + questions
+
+        return sorted(combined_list, key=lambda k: k['created_time'])
+

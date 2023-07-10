@@ -20,7 +20,7 @@ class SurveyInline(admin.TabularInline):
 
 @register(User)
 class UserAdmin(UserAdmin):
-    list_display = ('id', 'email', 'is_active')
+    list_display = ('id', 'email', 'is_active', 'is_consultant')
     list_display_links = ('id', 'email')
     list_filter = ('is_active',)
     list_editable = ('is_active',)

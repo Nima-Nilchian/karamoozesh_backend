@@ -1,5 +1,9 @@
 from rest_framework.decorators import api_view
+
+from ticket.models import Ticket
 from .serializers import ProfileSettingSerializer, ProfileActivitySerializer
+from ticket.serializers import *
+from rest_framework import generics
 from rest_framework import status
 from .models import Profile, UserSurvey
 from rest_framework.permissions import IsAuthenticated
@@ -39,6 +43,14 @@ class ProfileActivityRetrieveView(generics.RetrieveAPIView):
         return self.request.user
 
 
+class ProfileUserCreatedTicketsView(generics.ListAPIView):
+    serializer_class = TicketListSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Ticket.objects.filter(question__user_id=self.request.user).distinct().order_by('created_time')
+
+      
 class UserTalentSurveysView(generics.ListAPIView):
     serializer_class = TalentSurveySerializer
 
@@ -52,3 +64,4 @@ class UserTalentSurveysView(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
+
