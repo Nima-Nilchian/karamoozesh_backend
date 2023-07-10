@@ -64,10 +64,22 @@ class TicketSendMessageSerializer(serializers.Serializer):
             Answer.objects.create(consultant_id=user.consultant,
                                   answer=self.validated_data['message'],
                                   ticket_id=ticket)
+            ticket.status = '2'
+            ticket.save()
         else:
             Question.objects.create(user_id=user,
                                     question=self.validated_data['message'],
                                     ticket_id=ticket)
+            ticket.status = '1'
+            ticket.save()
 
 
+class TicketEndSerializer(serializers.Serializer):
+    ticket_id = serializers.IntegerField(write_only=True)
+    status = serializers.CharField(read_only=True)
+
+    def save(self, **kwargs):
+        ticket = Ticket.objects.get(id=self.validated_data['ticket_id'])
+        ticket.status = '3'
+        ticket.save()
 

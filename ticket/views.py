@@ -31,4 +31,15 @@ class TicketSendMessageView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
 
+class TicketEndView(generics.CreateAPIView):
+    serializer_class = TicketEndSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return Ticket.objects.get(id=self.request['ticket_id'])
+
+    def check_permissions(self, request):
+        if request.user.is_consultant:
+            return False
+        return True
 
