@@ -1,7 +1,11 @@
 from rest_framework import generics
+
+from ticket.models import Ticket
 from .models import Consultant, Skill, ConsultantSkills
 from .serializers import ConsultantSerializers, SkillSerializers, ConsultantSkillsSerializers
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from .permissions import IsConsultant
+from ticket.serializers import *
 
 
 class ConsultantList(generics.ListCreateAPIView):
@@ -47,3 +51,11 @@ class ConsultantSkillsDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ConsultantSkillsSerializers
     # permission_classes = (IsAdminUser,)
     permission_classes = (IsAuthenticated,)
+
+
+class ConsultantTicketView(generics.ListAPIView):
+    serializer_class = TicketListSerializer
+    permission_classes = [IsConsultant]
+
+    def get_queryset(self):
+        return Ticket.objects.filter(answer__consultant_id=self.request.user.consultant).distinct().order_by('created_time')
