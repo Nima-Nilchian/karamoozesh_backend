@@ -1,6 +1,9 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+
+from ticket.models import Ticket
 from .serializers import ProfileSettingSerializer, ProfileActivitySerializer
+from ticket.serializers import *
 from rest_framework import generics
 from rest_framework import status
 from .models import User, Profile
@@ -35,3 +38,10 @@ class ProfileActivityRetrieveView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+
+class ProfileUserCreatedTicketsView(generics.ListAPIView):
+    serializer_class = TicketListSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Ticket.objects.filter(question__user_id=self.request.user).distinct().order_by('created_time')
