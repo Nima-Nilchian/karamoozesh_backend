@@ -1,11 +1,13 @@
-from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializers import ProfileSettingSerializer, ProfileActivitySerializer
-from rest_framework import generics
 from rest_framework import status
-from .models import User, Profile
+from .models import Profile, UserSurvey
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
+from rest_framework import generics
+from rest_framework.response import Response
+from talent_survey.serializers import TalentSurveySerializer
+from talent_survey.models import TalentSurvey
 
 
 @api_view(['GET', ])
@@ -18,6 +20,7 @@ def user_id_getter(request):
             return Response({"user_id": user_id}, status=status.HTTP_200_OK)
 
         return Response({"message": "User Not Found"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ProfileSettingRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSettingSerializer
@@ -35,3 +38,17 @@ class ProfileActivityRetrieveView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+
+class UserTalentSurveysView(generics.ListAPIView):
+    serializer_class = TalentSurveySerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        user_surveys = UserSurvey.objects.filter(user_id=user_id)
+        survey_ids = [survey.survey_id_id for survey in user_surveys]
+        return TalentSurvey.objects.filter(id__in=survey_ids)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
