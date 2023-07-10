@@ -83,3 +83,24 @@ class TicketEndSerializer(serializers.Serializer):
         ticket.status = '3'
         ticket.save()
 
+
+class ConsultantAllRelatedTicketSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    tags = TagSerializer(many=True, source='ticket_tags')
+    questions = QuestionSerializer(many=True, source='question')
+    phone_number = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Ticket
+        fields = ['name', 'tags', 'questions', 'meeting_date', 'skill_level', 'contact_way', 'phone_number', 'email']
+
+    def get_name(self, instance):
+        return instance.question.first().user_id.get_full_name()
+
+    def get_phone_number(self, instance):
+        return instance.question.first().user_id.profile.phone_number
+
+    def get_email(self, instance):
+        return instance.question.first().user_id.email
+

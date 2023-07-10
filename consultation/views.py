@@ -59,3 +59,12 @@ class ConsultantTicketView(generics.ListAPIView):
 
     def get_queryset(self):
         return Ticket.objects.filter(answer__consultant_id=self.request.user.consultant).distinct().order_by('created_time')
+
+
+class ConsultantAllRelatedTicketView(generics.ListAPIView):
+    serializer_class = ConsultantAllRelatedTicketSerializer
+    permission_classes = [IsAuthenticated, IsConsultant]
+
+    def get_queryset(self):
+        return Ticket.objects.filter(ticket_tags__name__in=[s.skill_id.name for s in self.request.user.consultant.consultant_skills.all()])
+

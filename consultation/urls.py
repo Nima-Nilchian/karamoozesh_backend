@@ -16,5 +16,6 @@ urlpatterns = [
     path('consultant-skills/<int:pk>/', views.ConsultantSkillsDetail.as_view(), name='consultant-skills-detail'),
 
     # consultant tickets
-    path('ticket/', views.ConsultantTicketView.as_view(), name='consultant-ticket')
+    path('ticket/', views.ConsultantTicketView.as_view(), name='consultant-tickets'),
+    path('all-ticket/', views.ConsultantAllRelatedTicketView.as_view(), name='all-related-tickets'),
 ]
