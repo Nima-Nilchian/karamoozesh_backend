@@ -11,4 +11,6 @@ urlpatterns = [
         views.UserTalentSurveysView.as_view(),
         name='user-talent-surveys'
     ),
+    path('upload-image/', views.USerImageView.as_view(), name='upload-user-image'),
+
 ]
