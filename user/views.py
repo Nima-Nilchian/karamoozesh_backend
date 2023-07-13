@@ -1,4 +1,6 @@
 from rest_framework.decorators import api_view
+from rest_framework.parsers import MultiPartParser
+from rest_framework.views import APIView
 from ticket.models import Ticket
 from .serializers import ProfileSettingSerializer, ProfileActivitySerializer
 from ticket.serializers import *
@@ -64,3 +66,21 @@ class UserTalentSurveysView(generics.ListAPIView):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
+class USerImageView(APIView):
+    parser_classes = [MultiPartParser]
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        token = request.META.get('HTTP_AUTHORIZATION', None)
+        token = token.split(' ')[1]
+        if token is not None:
+            user = Token.objects.get(key=token).user
+
+            uploaded_image = request.FILES['image']
+            user = User.objects.get(id=user.id)
+            user.image = uploaded_image
+            user.save()
+
+            return Response('Photo uploaded successfully', status=status.HTTP_200_OK)
+        else:
+            return Response('token not found', status=status.HTTP_400_BAD_REQUEST)
