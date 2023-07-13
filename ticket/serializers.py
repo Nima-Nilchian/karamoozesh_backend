@@ -104,3 +104,25 @@ class ConsultantAllRelatedTicketSerializer(serializers.ModelSerializer):
     def get_email(self, instance):
         return instance.question.first().user_id.email
 
+
+class TicketCreateSerializer(serializers.ModelSerializer):
+    question = serializers.CharField()
+    tags = serializers.ListSerializer(child=serializers.CharField())
+
+    class Meta:
+        model = Ticket
+        fields = ['title', 'skill_level', 'meeting_date', 'contact_way', 'question', 'tags']
+
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        ticket = Ticket.objects.create(title=self.validated_data.get('title'),
+                                       skill_level=self.validated_data.get('skill_level', None),
+                                       meeting_date=self.validated_data.get('meeting_date', None),
+                                       contact_way=self.validated_data.get('contact_way', None))
+        Question.objects.create(user_id=user,
+                                question=self.validated_data['question'],
+                                ticket_id=ticket)
+        for tag_name in self.validated_data.get('tags', None):
+            Tag.objects.create(name=tag_name, ticket_id=ticket)
+        return ticket
+
