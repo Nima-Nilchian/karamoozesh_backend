@@ -7,7 +7,7 @@ from rest_framework import generics
 from .models import Ticket
 from .serializers import *
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from consultation.permissions import IsConsultant
+from custom_lib.permissions import IsConsultant
 from django.views import View
 
 
