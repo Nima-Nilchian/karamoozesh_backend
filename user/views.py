@@ -1,7 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.parsers import MultiPartParser
 from rest_framework.views import APIView
-
 from ticket.models import Ticket
 from .serializers import ProfileSettingSerializer, ProfileActivitySerializer
 from ticket.serializers import *

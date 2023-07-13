@@ -37,7 +37,11 @@ class TicketListSerializer(serializers.ModelSerializer):
                   'email', 'phone_number', 'last_date', 'messages']
 
     def get_last_date(self, instance):
-        return instance.answer.order_by('created_time').last().created_time
+        answers = instance.answer
+        if answers.count() > 0:
+            return answers.order_by('created_time').last().created_time
+        else:
+            return None
 
     def get_email(self, instance):
         return instance.question.first().user_id.email
@@ -93,7 +97,7 @@ class ConsultantAllRelatedTicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ticket
-        fields = ['name', 'tags', 'questions', 'meeting_date', 'skill_level', 'contact_way', 'phone_number', 'email']
+        fields = ['id', 'name', 'tags', 'questions', 'meeting_date', 'skill_level', 'contact_way', 'phone_number', 'email']
 
     def get_name(self, instance):
         return instance.question.first().user_id.get_full_name()
@@ -103,4 +107,26 @@ class ConsultantAllRelatedTicketSerializer(serializers.ModelSerializer):
 
     def get_email(self, instance):
         return instance.question.first().user_id.email
+
+
+class TicketCreateSerializer(serializers.ModelSerializer):
+    question = serializers.CharField()
+    tags = serializers.ListSerializer(child=serializers.CharField())
+
+    class Meta:
+        model = Ticket
+        fields = ['title', 'skill_level', 'meeting_date', 'contact_way', 'question', 'tags']
+
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        ticket = Ticket.objects.create(title=self.validated_data.get('title'),
+                                       skill_level=self.validated_data.get('skill_level', None),
+                                       meeting_date=self.validated_data.get('meeting_date', None),
+                                       contact_way=self.validated_data.get('contact_way', None))
+        Question.objects.create(user_id=user,
+                                question=self.validated_data['question'],
+                                ticket_id=ticket)
+        for tag_name in self.validated_data.get('tags', None):
+            Tag.objects.create(name=tag_name, ticket_id=ticket)
+        return ticket
 
