@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from permissions import IsOwner
+from custom_lib.permissions import IsOwner
 from rest_framework.response import Response
 from custom_lib.permissions import IsStaffOrReadOnly
 from .models import CV, Link, Project, Certificate,\

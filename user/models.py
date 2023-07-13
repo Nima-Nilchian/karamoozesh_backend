@@ -70,4 +70,3 @@ class FavoriteCVs(BaseModel):
 class UserSurvey(BaseModel):
     user_id = models.ForeignKey('User', related_name='surveys', on_delete=models.CASCADE)
     survey_id = models.ForeignKey(TalentSurvey, related_name='users', on_delete=models.CASCADE)
-    result = models.URLField()

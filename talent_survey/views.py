@@ -1,6 +1,5 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-
 from custom_lib.permissions import IsStaffOrReadOnly
 from .models import TalentSurvey
 from .serializers import TalentSurveySerializer

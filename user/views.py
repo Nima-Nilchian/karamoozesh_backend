@@ -1,5 +1,4 @@
 from rest_framework.decorators import api_view
-
 from ticket.models import Ticket
 from .serializers import ProfileSettingSerializer, ProfileActivitySerializer
 from ticket.serializers import *
