@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from permissions import IsOwner
 from rest_framework.response import Response
 from custom_lib.permissions import IsStaffOrReadOnly
 from .models import CV, Link, Project, Certificate,\
@@ -27,14 +28,14 @@ class CvList(generics.ListCreateAPIView):
     ordering_fields = ["created_time", "updated_time"]
     ordering = ["-created_time"]
     # permission_classes = (IsAdminUser,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
 
 class CvDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = CV.objects.all()
     serializer_class = CvSerializers
     # permission_classes = (IsAdminUser,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
 
 #  CV bank
@@ -60,7 +61,7 @@ class LinkListView(generics.ListCreateAPIView):
     ordering_fields = ["created_time", "updated_time"]
     ordering = ["-created_time"]
     # permission_classes = (IsAdminUser,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -72,7 +73,7 @@ class LinkDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Link.objects.all()
     serializer_class = LinkSerializers
     # permission_classes = (IsAdminUser,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_object(self):
         if self.kwargs.get('cv_id'):
@@ -92,7 +93,7 @@ class ProjectListView(generics.ListCreateAPIView):
     ordering_fields = ["created_time", "updated_time"]
     ordering = ["-created_time"]
     # permission_classes = (IsAdminUser,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -104,7 +105,7 @@ class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializers
     # permission_classes = (IsAdminUser,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_object(self):
         if self.kwargs.get('cv_id'):
@@ -124,7 +125,7 @@ class CertificateListView(generics.ListCreateAPIView):
     ordering_fields = ["created_time", "updated_time"]
     ordering = ["-created_time"]
     # permission_classes = (IsAdminUser,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -136,7 +137,7 @@ class CertificateDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Certificate.objects.all()
     serializer_class = CertificateSerializers
     # permission_classes = (IsAdminUser,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_object(self):
         if self.kwargs.get('cv_id'):
@@ -157,7 +158,7 @@ class SkillListView(generics.ListCreateAPIView):
     ordering_fields = ["level"]
     ordering = ["-level"]
     # permission_classes = (IsStaffOrReadOnly,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -173,7 +174,7 @@ class SkillDetailView(generics.RetrieveUpdateDestroyAPIView):
     ordering_fields = ["level"]
     ordering = ["-level"]
     # permission_classes = (IsStaffOrReadOnly,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_object(self):
         if self.kwargs.get('cv_id'):
@@ -194,7 +195,7 @@ class EducationListView(generics.ListCreateAPIView):
     ordering_fields = ["start_date"]
     ordering = ["+start_date"]
     # permission_classes = (IsAdminUser,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -208,7 +209,7 @@ class EducationDetailView(generics.RetrieveUpdateDestroyAPIView):
     ordering_fields = ["start_date"]
     ordering = ["+start_date"]
     # permission_classes = (IsAdminUser,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_object(self):
         if self.kwargs.get('cv_id'):
@@ -228,7 +229,7 @@ class WorkListView(generics.ListCreateAPIView):
     ordering_fields = ["start_date"]
     ordering = ["-start_date"]
     # permission_classes = (IsAdminUser,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -242,7 +243,7 @@ class WorkDetailView(generics.RetrieveUpdateDestroyAPIView):
     ordering_fields = ["start_date"]
     ordering = ["-start_date"]
     # permission_classes = (IsAdminUser,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_object(self):
         if self.kwargs.get('cv_id'):
@@ -263,7 +264,7 @@ class LanguageListView(generics.ListCreateAPIView):
     ordering_fields = ["level"]
     ordering = ["-level"]
     # permission_classes = (IsStaffOrReadOnly,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_queryset(self):
         if self.kwargs.get('cv_id'):
@@ -279,7 +280,7 @@ class LanguageDetailView(generics.RetrieveUpdateDestroyAPIView):
     ordering_fields = ["level"]
     ordering = ["-level"]
     # permission_classes = (IsStaffOrReadOnly,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
 
     def get_object(self):
         if self.kwargs.get('cv_id'):
