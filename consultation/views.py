@@ -4,7 +4,7 @@ from ticket.models import Ticket
 from .models import Consultant, Skill, ConsultantSkills
 from .serializers import ConsultantSerializers, SkillSerializers, ConsultantSkillsSerializers
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from .permissions import IsConsultant
+from custom_lib.permissions import IsConsultant
 from ticket.serializers import *
 
 
