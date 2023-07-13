@@ -11,19 +11,21 @@ from consultation.permissions import IsConsultant
 from django.views import View
 
 
-@csrf_exempt
-def TicketCreateView(request):
-    data = json.loads(request.body)
-    ticket = Ticket.objects.create(title=data.get('title'),
-                                   skill_level=data.get('skill_level', None),
-                                   meeting_date=data.get('meeting_date', None),
-                                   contact_way=data.get('contact_way', None))
-    Question.objects.create(user_id=request.user,
-                            question=data['question'],
-                            ticket_id=ticket)
-    for tag_name in data.get('tags', None):
-        Tag.objects.create(name=tag_name, ticket_id=ticket)
-    return JsonResponse(data={'ticket_id': ticket.id})
+class TicketCreateView(generics.CreateAPIView):
+    serializer_class = TicketCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        ticket = self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        data = serializer.data
+        data['ticket_id'] = ticket.id
+        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        return serializer.save()
 
 
 class TicketSendMessageView(generics.CreateAPIView):
