@@ -66,5 +66,7 @@ class ConsultantAllRelatedTicketView(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsConsultant]
 
     def get_queryset(self):
-        return Ticket.objects.filter(ticket_tags__name__in=[s.skill_id.name for s in self.request.user.consultant.consultant_skills.all()])
+        return Ticket.objects.filter(
+            ticket_tags__name__in=[s.skill_id.name for s in self.request.user.consultant.consultant_skills.all()],
+            status='1')
 

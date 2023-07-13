@@ -37,7 +37,11 @@ class TicketListSerializer(serializers.ModelSerializer):
                   'email', 'phone_number', 'last_date', 'messages']
 
     def get_last_date(self, instance):
-        return instance.answer.order_by('created_time').last().created_time
+        answers = instance.answer
+        if answers.count() > 0:
+            return answers.order_by('created_time').last().created_time
+        else:
+            return None
 
     def get_email(self, instance):
         return instance.question.first().user_id.email
@@ -93,7 +97,7 @@ class ConsultantAllRelatedTicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ticket
-        fields = ['name', 'tags', 'questions', 'meeting_date', 'skill_level', 'contact_way', 'phone_number', 'email']
+        fields = ['id', 'name', 'tags', 'questions', 'meeting_date', 'skill_level', 'contact_way', 'phone_number', 'email']
 
     def get_name(self, instance):
         return instance.question.first().user_id.get_full_name()
