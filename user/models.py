@@ -52,7 +52,7 @@ class User(AbstractUser):
 
 def get_upload_path(instance, filename):
     ext = filename.split('.')[-1]
-    return f'media/user/{instance.pk}.{ext}'
+    return f'user/{instance.pk}.{ext}'
 
 
 class Profile(BaseModel):
