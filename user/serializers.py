@@ -52,3 +52,10 @@ class ProfileActivitySerializer(serializers.ModelSerializer):
 
     def get_user(self, obj):
         return UserSerializer(obj, read_only=True).data
+
+
+class ProfileImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['image',]
+
