@@ -1,7 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
-from .serializers import RegisterSerializer, EmailSerializer,\
+from .serializers import RegisterSerializer, EmailSerializer, \
     ResetPasswordSerializer, LoginSerializer, ChangePasswordSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -12,6 +12,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+import random
 
 
 @api_view(['POST', ])
@@ -115,19 +116,25 @@ class PasswordReset(generics.GenericAPIView):
         email = serializer.validated_data["email"]
         user = User.objects.filter(email=email).first()
         if user:
-            encoded_pk = urlsafe_base64_encode(force_bytes(user.pk))
-            token = PasswordResetTokenGenerator().make_token(user)
+            # encoded_pk = urlsafe_base64_encode(force_bytes(user.pk))
+            # token = PasswordResetTokenGenerator().make_token(user)
 
-            reset_url = reverse("reset-password", kwargs={"encoded_pk": encoded_pk, "token": token})
-            current_site = get_current_site(request=request).domain
-            reset_link = 'http://' + current_site + reset_url
+            # reset_url = reverse("reset-password", kwargs={"encoded_pk": encoded_pk, "token": token})
+            # current_site = get_current_site(request=request).domain
+            # reset_link = 'http://' + current_site + reset_url
 
-            context_data = {'name': user.username, 'url': reset_link}
+            random_number = ""
+            for i in range(6):
+                random_number += str(random.randint(1, 9))
+
+            context_data = {'name': user.username, 'n1': random_number[0],
+                            'n2': random_number[1], 'n3': random_number[2], 'n4': random_number[3],
+                            'n5': random_number[4], 'n6': random_number[5]}
             data = Util.password_reset_body(context_data, user.email)
 
             Util.send_email(data)
-
-            return Response("reset email sent successfully", status=status.HTTP_200_OK)
+            response = {'random_number': random_number, 'message': 'email sent successfully'}
+            return Response(response, status=status.HTTP_200_OK)
         else:
             return Response({"message": "User doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
 
