@@ -66,7 +66,7 @@ class UserTalentSurveysView(generics.ListAPIView):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
-class ProfileImageView(generics.UpdateAPIView):
+class ProfImageView(generics.RetrieveUpdateAPIView):
     parser_classes = [MultiPartParser, FormParser]
     permission_classes = (IsAuthenticated,)
     serializer_class = ProfileImageSerializer

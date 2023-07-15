@@ -74,32 +74,35 @@ class EmailSerializer(serializers.Serializer):
 
 
 class ResetPasswordSerializer(serializers.Serializer):
+    email = serializers.CharField(write_only=True, min_length=1)
     password = serializers.CharField(style={'input_type': 'password'}, write_only=True, min_length=1)
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True, min_length=1)
 
     class Meta:
-        field = ("password", "password2")
+        field = ("email", "password", "password2")
 
     def validate(self, attrs):
 
         # Verify token and encoded_pk and then set new password.
+        email = attrs.get("email")
         password = attrs.get("password")
         password2 = attrs.get("password2")
 
-        token = self.context.get("kwargs").get("token")
-        encoded_pk = self.context.get("kwargs").get("encoded_pk")
+        # token = self.context.get("kwargs").get("token")
+        # encoded_pk = self.context.get("kwargs").get("encoded_pk")
 
-        if token is None or encoded_pk is None:
-            raise serializers.ValidationError("Missing data.")
-
-        pk = urlsafe_base64_decode(encoded_pk).decode()
-        user = User.objects.get(pk=pk)
-        if not PasswordResetTokenGenerator().check_token(user, token):
-            raise serializers.ValidationError("The reset token is invalid")
+        # if token is None or encoded_pk is None:
+        #     raise serializers.ValidationError("Missing data.")
+        #
+        # pk = urlsafe_base64_decode(encoded_pk).decode()
+        # user = User.objects.get(pk=pk)
+        # if not PasswordResetTokenGenerator().check_token(user, token):
+        #     raise serializers.ValidationError("The reset token is invalid")
 
         if password != password2:
             raise serializers.ValidationError({'error': 'pass1 and pass2 should be same!'})
 
+        user = User.objects.get(email=email)
         user.set_password(password)
         user.save()
         return attrs

@@ -49,10 +49,13 @@
             margin: 2rem 0;
         }
 
-        .btn {
-            margin: 0 auto;
-            width: 100%;
-            text-align: center;
+
+        .num-btn {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 4px 8px 4px 8px;
+            border: 1px solid #576BF0;
+            border-radius: 6px;
         }
 
         button {
@@ -90,20 +93,21 @@
             <div>
                 <div class="title">
                     <div>
-<!--                         <h1 class="name">{{name}}</h1> -->
                     </div>
                     <hr>
                 </div>
-                <div class=" desc">
+                <div class=" desc" style="direction.rtl">
                     <h1>شما به تازگی درخواست تغییر رمز عبور ثبت کرده اید. اگر این درخواست توسط شما ثبت نشده لطفا این
-                        ایمیل را نادیده بگیرید. برای تغییر رمز عبور روی لینک زیر کلیک کنید.
+                        ایمیل را نادیده بگیرید. برای تغییر رمز عبور عدد زیر را قسمت مربوطه وارد کنید.
                     </h1>
-
-                    <div class="btn">
-                        <button><a href="{{url}}">تغییر رمز عبور</a></button>
-                    </div>
-
-
+                        <div style="padding: 10px 0px 0px 100px">
+                        <span class="num-btn"> {{n1}} </span>
+                        <span class="num-btn"> {{n2}} </span>
+                        <span class="num-btn"> {{n3}} </span>
+                        <span class="num-btn"> {{n4}} </span>
+                        <span class="num-btn"> {{n5}} </span>
+                        <span class="num-btn"> {{n6}} </span>
+                        </div>
                 </div>
             </div>
         </section>
